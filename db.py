@@ -33,6 +33,14 @@ class BotDb:
         self.__connectionString = "host='%s' dbname='%s' user='%s' password='%s'" % \
                                   (access['host'], access['db'], access['user'], access['password'])
 
+    def add_tweet(self, tweet):
+        conn = psycopg2.connect(self.__connectionString)
+        cursor = conn.cursor()
+        query = 'INSERT INTO tweets(message) VALUES (%s);'
+        cursor.execute(query, (tweet,))
+        conn.commit()
+        conn.close()
+
     def add_try_retweet(self, id):
         func_result = False
 

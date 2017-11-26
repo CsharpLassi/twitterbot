@@ -69,10 +69,13 @@ def main():
     parser.add_argument("--start", help="Start Bot direct", action="store_true")
     parser.add_argument("--aut-file-db", help="Authentication File Database")
     parser.add_argument("--aut-file-bot", help="Authentication File Twitter")
+    parser.add_argument("--tweet", help="write tweet in the db")
     args = parser.parse_args()
 
     if args.start:
         bot.twitterbot(file_path_db=args.aut_file_db, file_path_bot=args.aut_file_bot).loop()
+    elif args.tweet:
+        db.BotDb(file_path_db=args.aut_file_db).add_tweet(args.tweet)
     else:
         newshell = shell(file_path_db=args.aut_file_db, file_path_bot=args.aut_file_bot).cmdloop()
 
