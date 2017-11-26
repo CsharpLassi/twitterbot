@@ -14,19 +14,23 @@ class twitterbot:
     __twitter = None
     __db = None
 
-    def __init__(self, file_path='twitter_aut.json'):
+    def __init__(self, file_path_bot=None, file_path_db=None):
+
+        if file_path_bot is None:
+            file_path_bot = 'twitter_aut.json'
 
         access = {'apiKey': '', 'apiSecret': '', 'accessToken': '', 'accessTokenSecret': ''}
 
-        if os.path.isfile(file_path):
-            with open(file_path, 'r') as f:
+        if os.path.isfile(file_path_bot):
+            with open(file_path_bot, 'r') as f:
                 access = json.load(f)
         else:
-            with open(file_path, 'w') as outfile:
+            with open(file_path_bot, 'w') as outfile:
                 json.dump(access, outfile)
 
-        self.__twitter = Twython(access['apiKey'], access['apiSecret'], access['accessToken'], access['accessTokenSecret'])
-        self.__db = BotDb()
+        self.__twitter = Twython(access['apiKey'], access['apiSecret'], access['accessToken'],
+                                 access['accessTokenSecret'])
+        self.__db = BotDb(file_path_db=file_path_db)
 
     def get_limits(self):
         limits = self.__twitter.get_application_rate_limit_status()

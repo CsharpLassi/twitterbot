@@ -16,18 +16,22 @@ class BotDb:
 
     __connectionString = ""
 
-    def __init__(self, file_path='db_aut.json'):
+    def __init__(self, file_path_db=None):
+
+        if file_path_db is None:
+            file_path_db = 'db_aut.json'
+
         access = {'host': '127.0.0.1', 'db': 'BotDb', 'user': 'BotUser', 'password': 'bot'}
 
-        if os.path.isfile(file_path):
-            with open(file_path, 'r') as f:
+        if os.path.isfile(file_path_db):
+            with open(file_path_db, 'r') as f:
                 access = json.load(f)
         else:
-            with open(file_path, 'w') as outfile:
+            with open(file_path_db, 'w') as outfile:
                 json.dump(access, outfile)
 
         self.__connectionString = "host='%s' dbname='%s' user='%s' password='%s'" % \
-                             (access['host'], access['db'], access['user'], access['password'])
+                                  (access['host'], access['db'], access['user'], access['password'])
 
     def add_try_retweet(self, id):
         func_result = False

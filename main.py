@@ -4,6 +4,7 @@ import cmd
 import argparse
 import db
 
+
 def split_line(count):
     def split_line_deko(func):
         def helper(self, line):
@@ -23,8 +24,13 @@ def split_line(count):
 
 
 class shell(cmd.Cmd):
-    __twitterbot = bot.twitterbot()
-    __db = db.BotDb()
+    __twitterbot = None
+    __db = None
+
+    def __init__(self, file_path_bot=None, file_path_db=None):
+        cmd.Cmd.__init__(self)
+        self.__twitterbot = bot.twitterbot(file_path_bot=file_path_bot, file_path_db=file_path_db)
+        self.__db = db.BotDb()
 
     def do_tweet(self, message):
         self.__twitterbot.tweet(message)
@@ -61,12 +67,14 @@ class shell(cmd.Cmd):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--start", help="Start Bot direct", action="store_true")
+    parser.add_argument("--aut-file-db", help="Authentication File Database")
+    parser.add_argument("--aut-file-bot", help="Authentication File Twitter")
     args = parser.parse_args()
 
     if args.start:
-        bot.twitterbot().loop()
+        bot.twitterbot(file_path_db=args.aut_file_db, file_path_bot=args.aut_file_bot).loop()
     else:
-        newshell = shell().cmdloop()
+        newshell = shell(file_path_db=args.aut_file_db, file_path_bot=args.aut_file_bot).cmdloop()
 
 
 if __name__ == '__main__':
