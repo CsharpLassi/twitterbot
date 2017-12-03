@@ -65,7 +65,7 @@ class twitterbot:
             followers = self.__twitter.get_friends_list()['users']
             for follower in followers:
                 screenName = follower["screen_name"]
-                tweets = self.__twitter.get_user_timeline(screen_name=screenName)
+                tweets = self.__twitter.get_user_timeline(screen_name=screenName, tweet_mode='extended')
                 for status in tweets:
                     id = status['id']
                     tweet_tags = [tag['text'].lower() for tag in status['entities']['hashtags']]
